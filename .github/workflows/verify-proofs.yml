@@ -1,0 +1,71 @@
+name: Verify Lean proofs (real kernel check)
+
+on: push
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan (Lean version manager)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Cache Mathlib build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake
+          key: dnls-lake-${{ hashFiles('lakefile.lean', 'lean-toolchain') }}
+
+      - name: lake build (the real check -- fails the job if anything doesn't compile)
+        run: |
+          lake update
+          lake exe cache get || true
+          lake build
+
+      - name: Real declaration + sorry scan (informational, from actually-compiled source)
+        run: |
+          echo "== theorem/lemma declarations =="
+          grep -rn "^theorem \|^lemma " TribonacciDNLS.lean FoldEvents.lean DNLSFoundations.lean
+          echo "== sorry usage =="
+          grep -rn "sorry" TribonacciDNLS.lean FoldEvents.lean DNLSFoundations.lean || echo "(none found)"
+
+      - name: Real axiom check through the Lean kernel
+        run: |
+          cat > /tmp/probe.lean << 'EOF'
+          import TribonacciDNLS
+          import FoldEvents
+          import DNLSFoundations
+
+          open TribonacciDNLS
+          open FoldEvents
+          open DNLS
+
+          -- TribonacciDNLS.lean -- already sorry-free per its own header
+          #print axioms η_gt_one
+          #print axioms η_pos
+          #print axioms η_characteristic
+          #print axioms w_pos
+          #print axioms w_strictAnti
+          #print axioms w_tendsto_zero
+
+          -- FoldEvents.lean
+          #print axioms stability_at_threshold
+          #print axioms g6_hex_lockin
+          #print axioms g6_hex_lockin_in_orbit
+
+          -- DNLSFoundations.lean -- first real pass toward
+          -- DNLS_MeasureTheory_Roadmap.lean Tiers 0-1
+          #print axioms poreSpace_isCompact
+          #print axioms poreSpace_interval_measure_finite
+          #print axioms fib_ellipticity_ratio_eq_two
+          #print axioms trib_ellipticity_ratio_eq_four
+          #print axioms trib_ellipticity_exceeds_fib
+          #print axioms ipr_scale_invariant
+          #print axioms hamMatrix_isSymm
+          #print axioms ipr_le_one
+          EOF
+          lake env lean /tmp/probe.lean
