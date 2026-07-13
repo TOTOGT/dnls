@@ -1,3 +1,5 @@
+**PREPRINT — NOT PEER REVIEWED**
+
 # Verification Statement & Conflict-of-Interest Disclosure
 
 This file exists because every deposit tied to this repository is
@@ -54,13 +56,27 @@ changes; it is not a one-time badge.
 
 ## 2. Conflict of interest / collaboration statement
 
-- **Sole author.** Pablo Nogueira Grossi is the sole author of the
-  papers, code, and formalizations in this repository. There are no
-  co-authors and no external collaborators on the current deposits.
-- **Funding.** This is independent, self-funded research (G6 LLC,
-  Newark, NJ). No grant, employer, or funding body has reviewed,
-  commissioned, or influenced these results. No funding source has a
-  financial interest in a particular outcome.
+- **No conflicts of interest.** None declared. The author has no
+  financial, institutional, or personal relationship that could be
+  reasonably seen as influencing the content of these deposits.
+- **Zero collaboration.** This is solo work. Pablo Nogueira Grossi is
+  the sole author of the papers, code, and formalizations in this
+  repository — no co-authors, no external collaborators, no lab, no
+  research group, on any current deposit.
+- **No institutional affiliation, no salary, no grant, no revenue.**
+  This research is unpaid and unaffiliated. G6 LLC (Newark, NJ) is a
+  personal bookselling entity (used to sell books on eBay), not a
+  research funder, employer, or institution — it has no stake in any
+  result here and does not commission, review, or influence this work.
+  No grant, university, or employer has reviewed or funded any of it.
+  To date, $0 has been earned from any deposit, PDF, or membership
+  tied to this work — there is no revenue stream this disclosure could
+  be protecting.
+- **Job-market disclosure.** The author is currently seeking a book
+  deal, literary/agent representation, and a salaried research or
+  teaching position, and has not yet decided on a graduate program.
+  None of these are currently in place — there is no existing
+  employer, agent, or publisher relationship to disclose beyond this.
 - **Publisher relationship.** Zenodo is a self-deposit archive
   (CERN/OpenAIRE); depositing here does not constitute peer review or
   editorial endorsement by Zenodo, CERN, or any journal.
