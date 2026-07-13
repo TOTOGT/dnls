@@ -1,4 +1,4 @@
-/-!
+/-
 # DNLSFoundations.lean
 # =====================
 # Real (non-`sorry`-by-design) mechanisation of the "CLOSEABLE NOW"
