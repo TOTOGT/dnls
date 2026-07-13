@@ -24,9 +24,10 @@
 # What is proved here WITHOUT sorry
 # ----------------------------------
 # 1. IPR is exactly invariant under nonzero complex rescaling.
-# 2. IPR ≤ 1 for any nonzero state -- MODULO one helper lemma below
-#    (`sum_sq_le_sq_sum_of_nonneg`) which still carries a disclosed
-#    sorry (see its docstring).
+# 2. IPR ≤ 1 for any nonzero state. (The helper lemma
+#    `sum_sq_le_sq_sum_of_nonneg` that earlier drafts left as a
+#    disclosed sorry is now discharged by Mathlib's
+#    `Finset.sum_sq_le_sq_sum_of_nonneg`.)
 # 3. The tridiagonal tight-binding Hamiltonian matrix (matching Cell 3's
 #    `build_hamiltonian` exactly) is symmetric by construction.
 # 4. Fibonacci's two-valued hopping {1.0, 0.5} has ellipticity ratio
@@ -94,11 +95,17 @@ roadmap tries to turn into a real Harnack-constant regularity gap
 between the two chains.
 -/
 
-def fibHopValues : Finset ℝ := {1, (0.5 : ℝ)}
-def tribHopValues : Finset ℝ := {1, (0.5 : ℝ), (0.25 : ℝ)}
+-- `noncomputable` because `Finset ℝ` literals go through `insert`,
+-- which needs `Real.decidableEq` (classical, not executable).
+noncomputable def fibHopValues : Finset ℝ := {1, (0.5 : ℝ)}
+noncomputable def tribHopValues : Finset ℝ := {1, (0.5 : ℝ), (0.25 : ℝ)}
 
-theorem fibHopValues_nonempty : fibHopValues.Nonempty := ⟨1, by decide⟩
-theorem tribHopValues_nonempty : tribHopValues.Nonempty := ⟨1, by decide⟩
+-- (`decide` cannot evaluate membership in a `Finset ℝ`; `simp` proves
+-- nonemptiness of an `insert` structurally.)
+theorem fibHopValues_nonempty : fibHopValues.Nonempty := by
+  simp [fibHopValues]
+theorem tribHopValues_nonempty : tribHopValues.Nonempty := by
+  simp [tribHopValues]
 
 /-- Ellipticity ratio of a finite, nonempty set of positive hopping
 values: max / min. -/
@@ -131,64 +138,53 @@ abbrev LatticeState (N : ℕ) := EuclideanSpace ℂ (Fin N)
 /-- IPR, transcribed directly from Cell 4's `ipr(psi)`:
 `sum |psi|^4 / (sum |psi|^2)^2`. -/
 noncomputable def ipr {N : ℕ} (x : Fin N → ℂ) : ℝ :=
-  (∑ i, Complex.abs (x i) ^ 4) / (∑ i, Complex.abs (x i) ^ 2) ^ 2
+  (∑ i, ‖x i‖ ^ 4) / (∑ i, ‖x i‖ ^ 2) ^ 2
 
 theorem ell2_sq_pos_of_ne_zero {N : ℕ} (x : Fin N → ℂ) (hx : x ≠ 0) :
-    0 < ∑ i, Complex.abs (x i) ^ 2 := by
+    0 < ∑ i, ‖x i‖ ^ 2 := by
   rcases Function.ne_iff.mp hx with ⟨j, hj⟩
-  apply Finset.sum_pos'
-  · intro i _
-    positivity
-  · exact ⟨j, Finset.mem_univ j, by positivity⟩
+  refine Finset.sum_pos' (fun i _ => by positivity) ?_
+  exact ⟨j, Finset.mem_univ j, pow_pos (norm_pos_iff.mpr hj) 2⟩
 
 /-- IPR is exactly invariant under nonzero complex rescaling
 `x ↦ c • x`. -/
 theorem ipr_scale_invariant {N : ℕ} (x : Fin N → ℂ) (c : ℂ) (hc : c ≠ 0) :
     ipr (fun i => c * x i) = ipr x := by
   unfold ipr
-  have hnum : ∀ i : Fin N, Complex.abs (c * x i) ^ 4
-      = Complex.abs c ^ 4 * Complex.abs (x i) ^ 4 := by
+  have hnum : ∀ i : Fin N, ‖c * x i‖ ^ 4 = ‖c‖ ^ 4 * ‖x i‖ ^ 4 := by
     intro i
-    rw [map_mul]
+    rw [norm_mul]
     ring
-  have hden : ∀ i : Fin N, Complex.abs (c * x i) ^ 2
-      = Complex.abs c ^ 2 * Complex.abs (x i) ^ 2 := by
+  have hden : ∀ i : Fin N, ‖c * x i‖ ^ 2 = ‖c‖ ^ 2 * ‖x i‖ ^ 2 := by
     intro i
-    rw [map_mul]
+    rw [norm_mul]
     ring
+  have h4 : (‖c‖ : ℝ) ^ 4 ≠ 0 := pow_ne_zero 4 (norm_pos_iff.mpr hc).ne'
   simp only [hnum, hden, ← Finset.mul_sum]
-  have habs : Complex.abs c ≠ 0 := by simpa using hc
-  have h4 : Complex.abs c ^ 4 ≠ 0 := pow_ne_zero 4 habs
-  rw [mul_pow]
-  field_simp
-  ring
+  -- `mul_div_mul_left` cancels `‖c‖⁴` even when the remaining
+  -- denominator is zero (the `x = 0` case), which `field_simp` cannot.
+  rw [mul_pow, show ((‖c‖ : ℝ) ^ 2) ^ 2 = ‖c‖ ^ 4 by ring,
+    mul_div_mul_left _ _ h4]
 
-/-- DISCLOSED GAP: for nonnegative reals, the sum of squares is at most
-the square of the sum -- the elementary cross-term-nonnegativity fact
-behind `ipr ≤ 1`. The informal algebra (expand `(∑a_i)² = ∑a_i² + 2·(off-
-diagonal cross terms ≥ 0)`) is correct; the exact `Finset` lemma to
-discharge the diagonal/off-diagonal split cleanly needs a real compiler
-session to pin down, so it is left `sorry` rather than guessed. -/
+/-- For nonnegative reals, the sum of squares is at most the square of
+the sum. Earlier drafts disclosed this as a `sorry` because the exact
+`Finset` API call was unverified without a compiler; it turns out
+Mathlib has it verbatim as `Finset.sum_sq_le_sq_sum_of_nonneg`. -/
 theorem sum_sq_le_sq_sum_of_nonneg {N : ℕ} (a : Fin N → ℝ) (ha : ∀ i, 0 ≤ a i) :
-    ∑ i, a i ^ 2 ≤ (∑ i, a i) ^ 2 := by
-  sorry
+    ∑ i, a i ^ 2 ≤ (∑ i, a i) ^ 2 :=
+  Finset.sum_sq_le_sq_sum_of_nonneg fun i _ => ha i
 
-/-- `ipr x ≤ 1` for any nonzero `x` -- CLOSED modulo the lemma above. -/
+/-- `ipr x ≤ 1` for any nonzero `x` -- now fully CLOSED (no sorry). -/
 theorem ipr_le_one {N : ℕ} (x : Fin N → ℂ) (hx : x ≠ 0) :
     ipr x ≤ 1 := by
   unfold ipr
-  set a : Fin N → ℝ := fun i => Complex.abs (x i) ^ 2 with ha_def
-  have ha_nonneg : ∀ i, 0 ≤ a i := fun i => by positivity
-  have key : ∑ i, a i ^ 2 ≤ (∑ i, a i) ^ 2 :=
-    sum_sq_le_sq_sum_of_nonneg a ha_nonneg
-  have hpow4 : ∀ i, Complex.abs (x i) ^ 4 = a i ^ 2 := by
-    intro i; rw [ha_def]; ring
-  simp only [hpow4]
-  have hdenpos : 0 < (∑ i, a i) ^ 2 := by
-    have := ell2_sq_pos_of_ne_zero x hx
-    have heq : ∑ i, a i = ∑ i, Complex.abs (x i) ^ 2 := rfl
-    rw [heq] at *
-    positivity
+  have key : ∑ i, ‖x i‖ ^ 4 ≤ (∑ i, ‖x i‖ ^ 2) ^ 2 := by
+    calc ∑ i, ‖x i‖ ^ 4 = ∑ i, (‖x i‖ ^ 2) ^ 2 :=
+          Finset.sum_congr rfl fun i _ => by ring
+      _ ≤ (∑ i, ‖x i‖ ^ 2) ^ 2 :=
+          sum_sq_le_sq_sum_of_nonneg (fun i => ‖x i‖ ^ 2) (fun i => by positivity)
+  have hdenpos : 0 < (∑ i, ‖x i‖ ^ 2) ^ 2 :=
+    pow_pos (ell2_sq_pos_of_ne_zero x hx) 2
   rw [div_le_one hdenpos]
   exact key
 
@@ -228,11 +224,11 @@ theorem hamMatrix_isSymm (N : ℕ) (hop : Fin N → ℝ) :
   trib_ellipticity_exceeds_fib       : ratio(Trib) > ratio(Fib)        ✓
   ipr_scale_invariant                : ipr(c•x) = ipr(x)               ✓
   hamMatrix_isSymm                   : HamMatrix is symmetric          ✓
-  ipr_le_one                         : ipr(x) ≤ 1     (depends on one disclosed sorry)
+  ipr_le_one                         : ipr(x) ≤ 1                      ✓
 
-Open proof obligation (tracked here, not hidden):
-  - sum_sq_le_sq_sum_of_nonneg : elementary Cauchy-Schwarz-adjacent
-    fact, algebra is right, exact Finset API call unverified.
+No open proof obligations remain in this file: the former disclosed
+sorry (`sum_sq_le_sq_sum_of_nonneg`) is discharged by Mathlib's
+`Finset.sum_sq_le_sq_sum_of_nonneg`.
 
 This is the first real (non-roadmap) push toward
 `DNLS_MeasureTheory_Roadmap.lean`'s Tiers 0-1. Tiers 2-9 (spectral
