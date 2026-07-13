@@ -78,7 +78,7 @@ theorem G_iter_thirty_three : G^[33] 0 = gThreshold := by
     iterate of `G` has the lock-in generation as a fixed point.
     Once the system is at generation 33, no number of further
     applications of `G` can move it. -/
-theorem stability_at_threshold (n : ℕ) (h : n ≥ gThreshold) :
+theorem stability_at_threshold (n : ℕ) (_h : n ≥ gThreshold) :
     Function.IsFixedPt G^[n] gThreshold := by
   show G^[n] gThreshold = gThreshold
   exact G_iter_threshold n
@@ -98,6 +98,10 @@ theorem g6_hex_lockin_in_orbit (n : ℕ) (h : gThreshold ≤ n) :
   rw [G_iter_zero_eq_min, min_eq_right h, g6_hex_lockin]
 
 /-! ## Sanity checks (computable, decidable) -/
+
+-- `decide` unfolds up to 100 iterations of `G` through the kernel;
+-- the default `maxRecDepth` (512) is too shallow for that.
+set_option maxRecDepth 10000
 
 example : G^[6]   gThreshold = 33 := by decide
 example : G^[33]  0           = 33 := by decide

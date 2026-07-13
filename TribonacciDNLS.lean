@@ -100,7 +100,7 @@ theorem w_pos (k : ℕ) : 0 < w k :=
   pow_pos (inv_pos.mpr η_pos) k
 
 /-- η⁻¹ ∈ (0, 1) because η > 1. -/
-private lemma η_inv_lt_one : η⁻¹ < 1 := inv_lt_one η_gt_one
+private lemma η_inv_lt_one : η⁻¹ < 1 := inv_lt_one_of_one_lt₀ η_gt_one
 
 private lemma η_inv_pos : 0 < η⁻¹ := inv_pos.mpr η_pos
 
@@ -110,16 +110,17 @@ private lemma η_inv_pos : 0 < η⁻¹ := inv_pos.mpr η_pos
 theorem w_strictAnti : StrictAnti w := by
   intro a b hab
   simp only [w]
-  exact pow_lt_pow_of_lt_one (le_of_lt η_inv_pos) η_inv_lt_one hab
+  exact pow_lt_pow_right_of_lt_one₀ η_inv_pos η_inv_lt_one hab
 
 /-- Corollary: the weight sequence is antitone (k ≤ l → w l ≤ w k). -/
 theorem w_antitone : Antitone w := StrictAnti.antitone w_strictAnti
 
 /-- The weights decay to zero: w k → 0 as k → ∞. -/
-theorem w_tendsto_zero : Filter.Tendsto w Filter.atTop (nhds 0) := by
-  simp only [w]
-  exact tendsto_pow_atTop_nhds_zero_of_lt_one
-    (le_of_lt η_inv_pos) η_inv_lt_one
+theorem w_tendsto_zero : Filter.Tendsto w Filter.atTop (nhds 0) :=
+  -- `w` unfolds definitionally to `fun k => (η⁻¹) ^ k`, so `exact` applies
+  -- the Mathlib limit lemma directly (a `simp only [w]` here makes no
+  -- progress: the goal mentions `w` unapplied).
+  tendsto_pow_atTop_nhds_zero_of_lt_one (le_of_lt η_inv_pos) η_inv_lt_one
 
 /-!
 ## Tribonacci recurrence
@@ -135,12 +136,16 @@ def tribonacci : ℕ → ℕ
   | (n + 3) => tribonacci (n + 2) + tribonacci (n + 1) + tribonacci n
 termination_by n => n
 
-@[simp] lemma tribonacci_zero : tribonacci 0 = 0 := rfl
-@[simp] lemma tribonacci_one  : tribonacci 1 = 1 := rfl
-@[simp] lemma tribonacci_two  : tribonacci 2 = 1 := rfl
+-- `tribonacci` is compiled by well-founded recursion (`termination_by`),
+-- so its defining equations do NOT hold by bare `rfl`; they are recovered
+-- through the auto-generated equation lemmas via `simp [tribonacci]`.
+@[simp] lemma tribonacci_zero : tribonacci 0 = 0 := by simp [tribonacci]
+@[simp] lemma tribonacci_one  : tribonacci 1 = 1 := by simp [tribonacci]
+@[simp] lemma tribonacci_two  : tribonacci 2 = 1 := by simp [tribonacci]
 
 lemma tribonacci_rec (n : ℕ) :
-    tribonacci (n + 3) = tribonacci (n + 2) + tribonacci (n + 1) + tribonacci n := rfl
+    tribonacci (n + 3) = tribonacci (n + 2) + tribonacci (n + 1) + tribonacci n := by
+  simp [tribonacci]
 
 /-!
 ## Summary of verified facts for the paper
