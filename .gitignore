@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+*.pyc
+.lake/
+.lake-manifest.json
+/lake-manifest.json
