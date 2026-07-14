@@ -13,6 +13,13 @@
     'norm conserved to <10⁻⁵',
   ];
 
+  // cataas requires numeric query params — hash string ids to a number
+  function numId(id) {
+    var h = 0;
+    for (var i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 100000;
+    return h;
+  }
+
   function observed() {
     try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
   }
@@ -46,10 +53,10 @@
     var img = modal.querySelector('img');
     var state = modal.querySelector('.state');
     if (isErwin) {
-      img.src = 'https://cataas.com/cat/says/ERWIN%3F!?width=500&height=500&fontSize=48&fontColor=%23ffcf3f&r=' + id;
+      img.src = 'https://cataas.com/cat/says/ERWIN%3F!?width=500&height=500&fontSize=48&fontColor=%23ffcf3f&r=' + numId(id);
       state.textContent = 'it’s… schrödinger?!';
     } else {
-      img.src = 'https://cataas.com/cat?width=500&height=500&r=dnls-' + id;
+      img.src = 'https://cataas.com/cat?width=500&height=500&r=' + numId(id);
       state.textContent = states[Math.floor(Math.random() * states.length)];
     }
     modal.classList.add('show');
