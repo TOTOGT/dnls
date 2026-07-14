@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Results — DNLS on Fibonacci &amp; Tribonacci Chains</title>
+<meta name="description" content="Version 4 results: finite-size scaling, long-time evolution to T=10⁶, spreading rates, and the self-trapping threshold gap.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">DNLS</a>
+  <div class="links">
+    <a href="index.html">Finding</a>
+    <a href="results.html" class="active">Results</a>
+    <a href="lean.html">Lean 4</a>
+    <a href="resources.html">Resources</a>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="kicker">Version 4 · Sections 4.3–4.7 <span class="catbox inline" data-cat="res-kick">📦</span></div>
+  <h2 style="margin-top:1rem">New in <span>Version 4</span></h2>
+</div>
+
+<section>
+  <div class="cards">
+    <div class="card"><h3><em>§4.4</em> Finite-size scaling at T=10⁴</h3><p>Across N ∈ {500, 1000, 2000} at seven λ values, the differential ratio IPR<sub>trib</sub>/IPR<sub>fib</sub> generally grows with N — supporting persistence in the thermodynamic limit. The λ=1.5 non-monotone N-dependence (peak at N=1000) is confirmed transient by the T=10⁵ verification run.</p></div>
+    <div class="card"><span class="catbox corner" data-cat="res-45">📦</span><h3><em>§4.5</em> Long-time evolution to T=10⁶</h3><p>At N=1000, λ=1.5 the ratio peaks at 4.18× (T=10⁴), collapses to 1.20× (T=10⁵), then both chains saturate to chain-limited IPR ≈ 0.002 with the ratio oscillating around 1.04 ± 0.04. The peak is a transient finite-size feature. DOP853, rtol=10⁻⁹, atol=10⁻¹¹; norm conserved to &lt;10⁻⁵.</p></div>
+    <div class="card"><h3><em>§4.6</em> Pre-saturation spreading rates</h3><p>Fitting IPR(t) ~ t⁻ᵅ for t &gt; 10⁴ at N=2000: α<sub>trib</sub> &gt; α<sub>fib</sub> uniformly across λ ∈ [0.5, 2.0]. Tribonacci spreads faster toward saturation but starts from a higher initial IPR and remains more retained throughout.</p></div>
+    <div class="card"><h3><em>§4.7</em> Self-trapping threshold gap</h3><p>Sweep λ ∈ {1, 2, 4, 8, 10} at N=500, T=10⁵: Fibonacci crosses into the self-trapped regime (α ≈ 0) in λ ∈ [4, 8]; tribonacci has not self-trapped by λ=10 (α<sub>trib</sub> ≥ 0.09 throughout). A difference in regime, not just magnitude.</p></div>
+    <div class="card"><span class="catbox corner" data-cat="res-43">📦</span><h3><em>§4.3</em> Multifractal dimension</h3><p>Clean power law at natural Fibonacci lengths: D²<sub>fib</sub> = 0.65 ± 0.11 (R² = 0.90). Tribonacci extraction deferred — a state-isolation artifact in the closest-to-E=0 selector requires eigenmode tracking (new open question).</p></div>
+    <div class="card"><h3><em>§6</em> Companion criticality paper</h3><p>The spectral-gap-controls-threshold mechanism (η &gt; φ) is the nonlinear counterpart of λc(n) ≈ 0.958 Δₙ + 0.107 (r = 0.989) in <a href="https://doi.org/10.5281/zenodo.20077205">10.5281/zenodo.20077205</a>.</p></div>
+  </div>
+</section>
+
+<section id="status">
+  <h2>Open questions — <span>status</span></h2>
+  <table>
+    <thead><tr><th>Question</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Finite-size scaling</td><td>FSS at T=10⁴ across N ∈ {500, 1000, 2000} established</td><td><span class="tag closed">Closed</span></td></tr>
+      <tr><td>Spreading exponent</td><td>α<sub>trib</sub> &gt; α<sub>fib</sub> uniformly; pre-saturation regime clarified</td><td><span class="tag closed">Closed</span></td></tr>
+      <tr><td>Longer time evolution</td><td>T=10⁶ at N=1000 done; thermodynamic limit open</td><td><span class="tag partial">Partial</span></td></tr>
+      <tr><td>Self-trapping threshold</td><td>Fibonacci in [4, 8], tribonacci &gt;10; fine λ-scan outstanding</td><td><span class="tag partial">Partial</span></td></tr>
+      <tr><td>Lean 4 IPR inequality</td><td>IPR<sub>trib</sub>(0) &gt; IPR<sub>fib</sub>(0) not yet formalized in AXLE</td><td><span class="tag open">Open</span></td></tr>
+      <tr><td>D²<sub>trib</sub> extraction <span class="catbox inline" data-cat="res-table">📦</span></td><td>State-isolation artifact requires eigenmode tracker or alternative observable</td><td><span class="tag open">Open</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  <span class="catbox big" data-cat="res-foot">📦</span>
+  <div class="cat-counter"></div>
+  <div class="contact">
+    Pablo Nogueira Grossi · G6 LLC, Newark NJ<br>
+    <a href="mailto:pgrossi888@outlook.com">pgrossi888@outlook.com</a> · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a> · <a href="https://orcid.org/0009-0000-6496-2186">ORCID</a><br><br>
+    © 2026 Pablo Nogueira Grossi — paper licensed <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>
+  </div>
+</footer>
+
+<script src="cats.js"></script>
+</body>
+</html>

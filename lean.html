@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lean 4 Verification — DNLS on Fibonacci &amp; Tribonacci Chains</title>
+<meta name="description" content="Lean 4 / Mathlib4 formal verification of analytic lemmas supporting the amplitude envelope ansatz.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">DNLS</a>
+  <div class="links">
+    <a href="index.html">Finding</a>
+    <a href="results.html">Results</a>
+    <a href="lean.html" class="active">Lean 4</a>
+    <a href="resources.html">Resources</a>
+  </div>
+</nav>
+
+<div class="page-head">
+  <div class="kicker">Formal verification · Lean 4 / Mathlib4 <span class="catbox inline" data-cat="lean-kick">📦</span></div>
+  <h2 style="margin-top:1rem">Lean 4 <span>formal verification</span></h2>
+  <p class="lead">Key analytic lemmas supporting the amplitude envelope ansatz are proved without <code>sorry</code> in <code>TribonacciDNLS.lean</code> (this deposit) and <code>TribonacciMeasure.lean</code> (<a href="https://github.com/TOTOGT/AXLE">AXLE repository</a>). The decay constant η ≈ 1.839287 is the Perron–Frobenius eigenvalue of the tribonacci companion matrix — the unique real root of x³ − x² − x − 1 = 0 in [1, 2].</p>
+</div>
+
+<section>
+  <div class="lean-list">
+    <div class="lean-item"><span>η_gt_one : 1 &lt; η</span><span class="check">✓ proved</span></div>
+    <div class="lean-item"><span>η_characteristic : η³ = η² + η + 1</span><span class="check">✓ proved</span></div>
+    <div class="lean-item"><span>w_pos : ∀ k, 0 &lt; η⁻ᵏ</span><span class="check">✓ proved</span></div>
+    <div class="lean-item"><span>w_strictAnti : StrictAnti (k ↦ η⁻ᵏ)</span><span class="check">✓ proved</span></div>
+    <div class="lean-item"><span>w_tendsto_zero : η⁻ᵏ → 0 as k → ∞</span><span class="check">✓ proved</span></div>
+    <div class="lean-item"><span>IPR_trib(0) &gt; IPR_fib(0) <span class="catbox inline" data-cat="lean-ipr">📦</span></span><span class="todo">○ open (AXLE roadmap)</span></div>
+    <div class="lean-item"><span>differential nonlinear robustness threshold (statement)</span><span class="todo">○ open (AXLE roadmap)</span></div>
+  </div>
+  <p class="lead" style="margin-top:2rem">Open proof obligations are tracked in the <a href="https://github.com/TOTOGT/AXLE">AXLE sorry roadmap</a>. Companion Lean files in the deposit: <code>TribonacciDNLS.lean</code>, <code>FoldEvents.lean</code>.</p>
+</section>
+
+<footer>
+  <span class="catbox big" data-cat="lean-foot">📦</span>
+  <div class="cat-counter"></div>
+  <div class="contact">
+    Pablo Nogueira Grossi · G6 LLC, Newark NJ<br>
+    <a href="mailto:pgrossi888@outlook.com">pgrossi888@outlook.com</a> · <a href="mailto:g6llc@proton.me">g6llc@proton.me</a> · <a href="https://orcid.org/0009-0000-6496-2186">ORCID</a><br><br>
+    © 2026 Pablo Nogueira Grossi — paper licensed <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>
+  </div>
+</footer>
+
+<script src="cats.js"></script>
+</body>
+</html>
