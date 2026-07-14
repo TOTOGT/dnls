@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNLS — Discreet. Non-Linear. Cats. Mostly living.</title>
+<meta name="description" content="DNLS. Discreet, non-linear cats in boxes. Mostly living.">
+<style>
+  :root {
+    --bg: #0a0a0d;
+    --bg2: #131318;
+    --fg: #f2f0ec;
+    --muted: #8a8794;
+    --accent: #ffcf3f;
+    --accent2: #ff4f6d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 5vw;
+    background: rgba(10,10,13,.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #222;
+  }
+  nav .logo { font-weight: 900; font-size: 1.4rem; letter-spacing: .15em; color: var(--accent); }
+  nav a { color: var(--muted); text-decoration: none; margin-left: 1.5rem; font-size: .9rem; text-transform: uppercase; letter-spacing: .1em; }
+  nav a:hover { color: var(--accent); }
+  /* HERO */
+  header {
+    min-height: 92vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 2rem 5vw;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(255,207,63,.08), transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(255,79,109,.08), transparent 50%),
+      var(--bg);
+  }
+  header h1 {
+    font-size: clamp(4rem, 16vw, 12rem);
+    font-weight: 900; letter-spacing: .08em; line-height: 1;
+    background: linear-gradient(120deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  /* The sneaky bass intro: words creep in one by one */
+  .intro-line {
+    margin-top: 1.5rem;
+    font-size: clamp(1.1rem, 3.2vw, 1.8rem);
+    text-transform: uppercase; letter-spacing: .25em; color: var(--muted);
+    display: flex; gap: 1.2em; flex-wrap: wrap; justify-content: center;
+  }
+  .intro-line span {
+    opacity: 0; transform: translateX(-14px);
+    animation: creep .55s cubic-bezier(.2,.9,.3,1.2) forwards;
+  }
+  .intro-line span:nth-child(1) { animation-delay: .5s; color: var(--accent); font-weight: 800; }
+  .intro-line span:nth-child(2) { animation-delay: 1.3s; }
+  .intro-line span:nth-child(3) { animation-delay: 2.1s; }
+  .intro-line span:nth-child(4) { animation-delay: 3.1s; color: var(--accent2); font-weight: 800; }
+  @keyframes creep { to { opacity: 1; transform: none; } }
+  .bassline { margin-top: 2.2rem; font-size: 1.4rem; letter-spacing: .4em; color: #333; }
+  .bassline b { color: var(--accent); animation: thump 1.6s steps(1) infinite; }
+  .bassline b:nth-child(2) { animation-delay: .2s; }
+  .bassline b:nth-child(3) { animation-delay: .8s; }
+  .bassline b:nth-child(4) { animation-delay: 1s; }
+  @keyframes thump { 0%, 12% { color: var(--accent2); } 13%, 100% { color: #333; } }
+  .cta {
+    margin-top: 2.5rem; display: inline-block;
+    padding: .9rem 2.4rem; border: 2px solid var(--accent);
+    color: var(--accent); text-decoration: none; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .15em;
+    transition: all .2s;
+  }
+  .cta:hover { background: var(--accent); color: var(--bg); }
+  /* SECTIONS */
+  section { padding: 6rem 5vw; max-width: 1200px; margin: 0 auto; }
+  section h2 {
+    font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 900;
+    margin-bottom: 1.5rem; letter-spacing: .05em;
+  }
+  section h2 span { color: var(--accent); }
+  section p.lead { color: var(--muted); max-width: 60ch; font-size: 1.1rem; }
+  /* BOXES */
+  .grid {
+    display: grid; gap: 14px; margin-top: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  .box {
+    aspect-ratio: 1; border: 1px solid #2a2a30; background: var(--bg2);
+    display: grid; place-items: center; cursor: pointer; position: relative;
+    font-size: 4rem; user-select: none;
+    transition: transform .15s, border-color .15s;
+    overflow: hidden;
+  }
+  .box:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .box .label {
+    position: absolute; bottom: 10px; left: 0; right: 0;
+    font-size: .7rem; text-transform: uppercase; letter-spacing: .2em; color: var(--muted);
+  }
+  .box img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(30%) contrast(1.1);
+  }
+  .box .state {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: .4rem;
+    background: rgba(10,10,13,.85); font-size: .75rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .2em; color: var(--accent);
+  }
+  /* FACTS */
+  .facts { display: grid; gap: 1.5rem; margin-top: 3rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .fact { background: var(--bg2); border: 1px solid #222; padding: 2rem; }
+  .fact .num { font-size: 2.6rem; font-weight: 900; color: var(--accent); }
+  .fact h3 { margin: .5rem 0; font-size: 1.1rem; }
+  .fact p { color: var(--muted); font-size: .95rem; }
+  /* FOOTER */
+  footer { border-top: 1px solid #222; padding: 4rem 5vw; text-align: center; color: var(--muted); }
+  footer .big { font-size: 3rem; }
+  footer p { margin-top: 1rem; font-size: .9rem; letter-spacing: .1em; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">DNLS</div>
+  <div>
+    <a href="#about">About</a>
+    <a href="#boxes">The Boxes</a>
+    <a href="#facts">Findings</a>
+  </div>
+</nav>
+
+<header>
+  <h1>DNLS</h1>
+  <div class="intro-line">
+    <span>Discreet</span><span>Non</span><span>Linear</span><span>Schrödingers</span>
+  </div>
+  <div class="bassline"><b>♩</b><b>♩</b><b>♪</b><b>♪</b> ♩ ♩ ♪ ♪</div>
+  <a class="cta" href="#boxes">Open the boxes</a>
+</header>
+
+<section id="about">
+  <h2>What is <span>DNLS</span>?</h2>
+  <p class="lead">
+    Somewhere between the bass of the Pink Panther and a physics
+    lecture nobody finished, we introduce DNLS: discreet, non-linear
+    cats, sealed in boxes, in a superposition of states. Until you
+    look, every cat is everything at once. Once you look — mostly living.
+  </p>
+</section>
+
+<section id="boxes">
+  <h2>The <span>Boxes</span></h2>
+  <p class="lead">Each box holds one unobserved cat. Click to collapse the wavefunction. No refunds on collapsed states.</p>
+  <div class="grid" id="boxGrid"></div>
+</section>
+
+<section id="facts">
+  <h2>Experimental <span>Findings</span></h2>
+  <div class="facts">
+    <div class="fact"><div class="num">100%</div><h3>Box occupancy</h3><p>If a box exists, a cat is in it. This is the only law of physics cats respect.</p></div>
+    <div class="fact"><div class="num">~50%</div><h3>Theoretical survival rate</h3><p>Observed rate: much higher. The cats refuse to cooperate with the thought experiment.</p></div>
+    <div class="fact"><div class="num">0</div><h3>Linear behaviors recorded</h3><p>Trajectories remain non-linear: sprint, stop, stare at wall, teleport to kitchen.</p></div>
+    <div class="fact"><div class="num">♩♪</div><h3>Discretion level</h3><p>They walk in on two notes of bass. You never hear them coming. Suddenly: cat.</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="big">📦🐈‍⬛</div>
+  <p>DNLS — do not observe unless prepared to be responsible for the outcome · totogt.github.io/dnls</p>
+</footer>
+
+<script>
+  const grid = document.getElementById('boxGrid');
+  const seed = Date.now();
+  const states = ['mostly living', 'mostly living', 'mostly living', 'extremely alive', 'alive & judging', 'alive, mildly annoyed'];
+  const erwin = Math.floor(Math.random() * 12); // one box holds a surprise
+  for (let i = 0; i < 12; i++) {
+    const box = document.createElement('div');
+    box.className = 'box';
+    box.innerHTML = '📦<div class="label">unobserved</div>';
+    box.addEventListener('click', () => {
+      if (box.dataset.open) return;
+      box.dataset.open = '1';
+      const state = document.createElement('div');
+      state.className = 'state';
+      if (i === erwin) {
+        // box opens, out comes Schrödinger
+        box.textContent = '👨‍🔬';
+        state.textContent = 'it’s… schrödinger?!';
+        box.append(state);
+        return;
+      }
+      const img = document.createElement('img');
+      img.src = `https://cataas.com/cat?width=500&height=500&r=${seed + i}`;
+      img.alt = 'A recently observed cat';
+      img.onerror = () => img.remove();
+      state.textContent = states[Math.floor(Math.random() * states.length)];
+      box.textContent = '🐱';
+      box.append(img, state);
+    }, { once: false });
+    grid.appendChild(box);
+  }
+</script>
+
+</body>
+</html>
