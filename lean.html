@@ -22,7 +22,7 @@
 <div class="page-head">
   <div class="kicker">Formal verification · Lean 4 / Mathlib4 <span class="catbox inline" data-cat="lean-kick">📦</span></div>
   <h2 style="margin-top:1rem">Lean 4 <span>formal verification</span></h2>
-  <p class="lead">Key analytic lemmas supporting the amplitude envelope ansatz are proved without <code>sorry</code> in <code>TribonacciDNLS.lean</code> (this deposit) and <code>TribonacciMeasure.lean</code> (<a href="https://github.com/TOTOGT/AXLE">AXLE repository</a>). The decay constant η ≈ 1.839287 is the Perron–Frobenius eigenvalue of the tribonacci companion matrix — the unique real root of x³ − x² − x − 1 = 0 in [1, 2].</p>
+  <p class="lead">Key analytic lemmas supporting the amplitude envelope ansatz are proved without <code>sorry</code> and kernel-checked in <code>TribonacciMeasure.lean</code> (<a href="https://github.com/TOTOGT/AXLE">AXLE repository</a>). The companion file <code>TribonacciDNLS.lean</code> in the Zenodo deposit does not currently pass kernel check and should be treated as work in progress. The decay constant η ≈ 1.839287 is the Perron–Frobenius eigenvalue of the tribonacci companion matrix — the unique real root of x³ − x² − x − 1 = 0 in [1, 2].</p>
 </div>
 
 <section>
@@ -35,7 +35,7 @@
     <div class="lean-item"><span>IPR_trib(0) &gt; IPR_fib(0) <span class="catbox inline" data-cat="lean-ipr">📦</span></span><span class="todo">○ open (AXLE roadmap)</span></div>
     <div class="lean-item"><span>differential nonlinear robustness threshold (statement)</span><span class="todo">○ open (AXLE roadmap)</span></div>
   </div>
-  <p class="lead" style="margin-top:2rem">Open proof obligations are tracked in the <a href="https://github.com/TOTOGT/AXLE">AXLE sorry roadmap</a>. Companion Lean files in the deposit: <code>TribonacciDNLS.lean</code>, <code>FoldEvents.lean</code>.</p>
+  <p class="lead" style="margin-top:2rem">Verified lemmas above refer to <code>TribonacciMeasure.lean</code> (AXLE). Open proof obligations — including restoring kernel check for the deposit's <code>TribonacciDNLS.lean</code> — are tracked in the <a href="https://github.com/TOTOGT/AXLE">AXLE sorry roadmap</a>. Other Lean files in the deposit: <code>FoldEvents.lean</code>.</p>
 </section>
 
 <footer>
